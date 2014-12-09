@@ -1,0 +1,9 @@
+include ':Mocha', ':HorizontalVariableListView-master', ':ListView_animotion/library', ':MultiprocessPreferences-master', ':PinterestLikeAdapterView-master'
+
+project(':HorizontalVariableListView-master').projectDir = new File('/Users/xxx/Documents/code/HorizontalVariableListView-master')
+
+project(':ListView_animotion/library').projectDir = new File('/Users/xxx/Documents/code/ListView_animotion/library')
+
+project(':MultiprocessPreferences-master').projectDir = new File('/Users/xxx/Documents/code/MultiprocessPreferences-master')
+
+project(':PinterestLikeAdapterView-master').projectDir = new File('/Users/xxx/Documents/code/PinterestLikeAdapterView-master')
