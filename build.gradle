@@ -5,7 +5,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.13.+'
+        classpath 'com.android.tools.build:gradle:1.0.+'
     }
 }
 
@@ -61,7 +61,7 @@ android {
 
     signingConfigs {
         release {
-        	//输入自己的keyStore以及keyAlias
+            //输入自己的keyStore以及keyAlias
             storeFile file("release.keystore")
             storePassword STOREPASS
             keyAlias 'xxxx'
@@ -72,8 +72,8 @@ android {
    buildTypes {
         release {
             signingConfig signingConfigs.release
-            runProguard true
-            zipAlign true
+            minifyEnabled true
+            zipAlignEnabled true
             //输入自己的混淆文件
             proguardFile 'proguard.txt'
         }
@@ -103,9 +103,9 @@ import java.util.regex.Pattern
 import java.util.regex.Matcher
 
 //替换AndroidManifest.xml的UMENG_CHANNEL_VALUE字符串为渠道名称 By Remex Huang
-android.applicationVariants.all{ variant -> 
-    variant.processManifest.doLast{
-    
+android.applicationVariants.all{ variant ->
+    variant.outputs.get(0).processManifest.doLast{
+
         //之前这里用的copy{}，我换成了文件操作，这样可以在v1.11版本正常运行，并保持文件夹整洁
         //${buildDir}是指./build文件夹
         //${variant.dirName}是flavor/buildtype，例如GooglePlay/release，运行时会自动生成
@@ -128,7 +128,7 @@ android.applicationVariants.all{ variant ->
         apkname = apkname.replaceAll("pre", "")
 
         def manifestFile = "${buildDir}/intermediates/manifests/full/${variant.dirName}/AndroidManifest.xml"
-        
+
         //将字符串UMENG_CHANNEL_VALUE替换成flavor的名字
         def updatedContent = new File(manifestFile).getText('UTF-8').replaceAll("MOCHA_CHANNEL", channel)
         new File(manifestFile).write(updatedContent, 'UTF-8')
@@ -144,19 +144,20 @@ android.applicationVariants.all{ variant ->
         def versionName = + majorVersion + "." + minorVersion + "." + pointVersion
 
         //将此次flavor的AndroidManifest.xml文件指定为我们修改过的这个文件
-        variant.processResources.manifestFile = file("${buildDir}/intermediates/manifests/full/${variant.dirName}/AndroidManifest.xml")
+        variant.outputs.get(0).processResources.manifestFile = file("${buildDir}/intermediates/manifests/full/${variant.dirName}/AndroidManifest.xml")
 
         println "******************/\n/\n/\n/\n/\n/\n"
         println "buildType.name = "  + variant.buildType.name
         println "******************/\n/\n/\n/\n/\n/\n"
         def apkName = "Mocha";
         if (variant.buildType.name == "release") {
-        	//此处将apk保存到指定目录，按照版本号做子文件夹 命名规则是Mocha_Xiaomi_V4.4.2.apk
             apkName += apkname + "_V" + versionName + ".apk";
-            variant.outputFile = file("/Users/xxx/Documents/xxx/apk/" + versionName + "/" + apkName)
+            //variant.outputFile = file("${buildDir}/outputs/mochapk/" + apkName)
+            // !! 这里需要自定义自己的输出文件夹
+            variant.outputs.get(0).outputFile = file("/Users/tengfei/Documents/yunyao/code/mocha/apk/" + versionName + "/" + apkName)
         } else {
             apkName += apkname + "-SNAPSHOT.apk";
-            variant.outputFile = file("${buildDir}/outputs/apk/" + apkName)
+            variant.outputs.get(0).outputFile = file("${buildDir}/outputs/apk/" + apkName)
         }
     }
 }
