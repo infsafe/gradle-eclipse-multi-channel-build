@@ -17,7 +17,7 @@ https://github.com/umeng/umeng-muti-channel-build-tool/tree/master/Gradle
 
 使用方法：<br />
 1、将build.gradle和settings.gradle拷贝到目标工程下面，修改里面的路径、文件名等相关参数。<br />
-2、将lib.gradle拷贝到lib工程下面。<br />
+2、将lib.gradle拷贝到lib工程下面。注意：lib工程需要和root工程在同一目录，同级。如果不在同一目录清修改settings.gradle的设置<br />
 
 然后在目标root工程的下面运行命令：<br />
 gradle -PSTOREPASS='你的keystore密码' -PKEYPASS='你的alias密码' clean --stacktrace <br />
